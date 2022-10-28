@@ -11,11 +11,9 @@ struct Element {
 typedef struct Element element;
 
 
-// TYPE LISTE_LIGNE
-typedef element *liste_ligne;
+typedef element* liste_ligne;
 
 
-// STRUCTURE MATRICE CREUSE
 struct MatriceCreuse {
     int Nlignes;
     int Ncolonnes;
@@ -26,15 +24,16 @@ typedef struct MatriceCreuse matrice_creuse;
 
 matrice_creuse* creerMatriceCeuse(int Nlig, int Ncol);
 void remplirMatrice(matrice_creuse *m, int N, int M);
-
-
+// fonctions ajoutées
+element* additionLigne(element* A, element* B);
+int nombreElementListe(element* A);
+//
 void afficherMatrice(matrice_creuse m);
 void afficherMatriceListes(matrice_creuse m);
 int rechercherValeur(matrice_creuse m, int i, int j);
 void affecterValeur(matrice_creuse* m, int i, int j, int val);
-void additionerMatrices(matrice_creuse m1, matrice_creuse m2);
+void additionerMatrices(matrice_creuse* m1, matrice_creuse* m2);
 int nombreOctetsGagnes(matrice_creuse m);
-
 
 
 #endif // TP3_H_INCLUDED

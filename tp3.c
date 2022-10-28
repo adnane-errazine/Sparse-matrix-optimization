@@ -4,9 +4,6 @@
 #include "tp3.h"
 
 
-// Fonction qui permet de cr�er un �lement d'une liste cha�n�e
-// Params : indice de colonne (int), valeur de l'�lement (int)
-// Return : pointeur vers le nouvele �lement cr��
 element *creerElement(int colonne, int valeur) {
     element *nouvelElement = malloc(sizeof(element));
     nouvelElement->col = colonne;
@@ -63,7 +60,7 @@ void afficherMatrice(matrice_creuse m){
 
 printf("On affiche la matrice de %d lignes et %d colonnes :\n",m.Nlignes,m.Ncolonnes);
     int i,past,j;
-    for (int i=0;i<m.Nlignes;i++)
+    for ( i=0;i<m.Nlignes;i++)
       { past=0;
         element* temp=(m.tab_lignes)[i];
         if(temp!=NULL)
@@ -163,17 +160,68 @@ void affecterValeur(matrice_creuse* m, int i, int j, int NewVal) {
     return;
 }
 
-
-void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
-
-  /*Ecrire ici le code de cette fonction*/
-
+element* additionLigne(element* A, element* B)
+{
+    if(A==NULL && B==NULL){return NULL;}
+    if(A!=NULL && (B==NULL || A->col < B->col) )
+    {
+        element* New=creerElement(A->col,A->val);
+        New->suivant=additionLigne(A->suivant,B);
+        return New;
+    }
+    if(B!=NULL && (A==NULL || B->col < A->col) )
+    {
+        element* New=creerElement(B->col,B->val);
+        New->suivant=additionLigne(B->suivant,A);
+        return New;
+    }
+    if (B!=NULL && A!=NULL && B->col == A->col )
+    {
+        element* New=creerElement(A->col,A->val + B->val);
+        New->suivant=additionLigne(A->suivant,B->suivant);
+        return New;
+    }
 }
+// complexité O( taille de la liste A + taille de la liste B )
+// omega( 2*nbr_colonne )
+void additionerMatrices(matrice_creuse* m1, matrice_creuse* m2) {
+if( m1->Nlignes == m2->Nlignes   )
+for (int i=0;i<m1->Nlignes;i++)
+{
+    (m1->tab_lignes)[i]=additionLigne((m1->tab_lignes)[i],(m2->tab_lignes)[i]);
+}
+return;
+}
+//complexité O(n* ( ???
+// omega( nbr_lignes *2 nbr_colonnes )
 
+int nombreElementListe(element* A){
+int R=0;
+element* temp=A;
+while(temp!=NULL)
+{
+    R++;
+    temp=temp->suivant;
+}
+return R;
+}
 
 int nombreOctetsGagnes(matrice_creuse m) {
-
-  /*Ecrire ici le code de cette fonction*/
-return 0;
+    int tab[m.Nlignes][m.Ncolonnes];
+    int j=0;
+    for (int i =0;i<m.Nlignes;i++)
+    {
+        j+=sizeof(element)*nombreElementListe((m.tab_lignes)[i]);
+    }
+    j+=sizeof(matrice_creuse)+sizeof(element*)*(m.Nlignes-1);
+    return sizeof(tab)- j;
 }
 
+/*
+- interface
+- compléxité
+- derniere fonction
+- libération de la mémoire
+- rédaction du rapport
+- nombreOctetsGagnes à vérifier
+*/
